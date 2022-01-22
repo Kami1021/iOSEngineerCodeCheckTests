@@ -13,7 +13,6 @@ class ResultViewController: UIViewController {
     @IBOutlet weak var ImageView: UIImageView!
     
     @IBOutlet weak var TitleLabel: UILabel!
-    
     @IBOutlet weak var LanguageLabel: UILabel!
     
     @IBOutlet weak var StarsLabel: UILabel!
@@ -24,6 +23,7 @@ class ResultViewController: UIViewController {
     var vc1: SearchViewController!
         
     override func viewDidLoad() {
+        
         super.viewDidLoad()
         
         let repo = vc1.repositories[vc1.idx]
@@ -34,7 +34,6 @@ class ResultViewController: UIViewController {
         ForksLabel.text = "\(repo["forks_count"] as? Int ?? 0) forks"
         IssuesLabel.text = "\(repo["open_issues_count"] as? Int ?? 0) open issues"
         getImage()
-        
     }
     
     func getImage(){
@@ -44,16 +43,17 @@ class ResultViewController: UIViewController {
         TitleLabel.text = repo["full_name"] as? String
         
         if let owner = repo["owner"] as? [String: Any] {
+            
             if let imgURL = owner["avatar_url"] as? String {
+                
                 URLSession.shared.dataTask(with: URL(string: imgURL)!) { (data, res, err) in
                     let img = UIImage(data: data!)!
                     DispatchQueue.main.async {
+                        
                         self.ImageView.image = img
                     }
-                }.resume()
+                } .resume()
             }
         }
-        
     }
-    
 }
