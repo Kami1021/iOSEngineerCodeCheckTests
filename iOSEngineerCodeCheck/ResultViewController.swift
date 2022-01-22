@@ -27,7 +27,7 @@ class ResultViewController: UIViewController {
         
         super.viewDidLoad()
         
-        let repo = vc1.repositories[vc1.idx]
+        let repo = vc1.repositories[vc1.index]
         
         //該当リポジトリの詳細テキスト
         LanguageLabel.text = "Written in \(repo["language"] as? String ?? "")"
@@ -40,7 +40,7 @@ class ResultViewController: UIViewController {
     
     func getImage(){
         
-        let repo = vc1.repositories[vc1.idx]
+        let repo = vc1.repositories[vc1.index]
         // repo["owner"]でString型でダウンキャスト
         TitleLabel.text = repo["full_name"] as? String
         
@@ -48,13 +48,13 @@ class ResultViewController: UIViewController {
         if let owner = repo["owner"] as? [String: Any] {
             
             // repo["owner"]をString型でダウンキャストを試みる
-            if let imgURL = owner["avatar_url"] as? String {
+            if let imageURL = owner["avatar_url"] as? String {
                 
-                URLSession.shared.dataTask(with: URL(string: imgURL)!) { (data, res, err) in
-                    let img = UIImage(data: data!)!
+                URLSession.shared.dataTask(with: URL(string: imageURL)!) { (data, res, err) in
+                    let image = UIImage(data: data!)!
                     DispatchQueue.main.async {
                         
-                        self.ImageView.image = img
+                        self.ImageView.image = image
                     }
                 } .resume()
             }
