@@ -22,14 +22,14 @@ class SearchViewController: UITableViewController, UISearchBarDelegate {
     override func viewDidLoad() {
         
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        // 検索句画面起動時に呼び出し
         SearchBar.text = "GitHubのリポジトリを検索できるよー"
         SearchBar.delegate = self
     }
     
     func searchBarShouldBeginEditing(_ searchBar: UISearchBar) -> Bool {
         
-        // ↓こうすれば初期のテキストを消せる
+        // 初期テキスト削除
         searchBar.text = ""
         return true
     }
@@ -43,6 +43,7 @@ class SearchViewController: UITableViewController, UISearchBarDelegate {
         
         word = searchBar.text!
         
+        //サーチバーに文字が入力されていたら実行
         if word.count != 0 {
             
             url = "https://api.github.com/search/repositories?q=\(word!)"
@@ -60,11 +61,12 @@ class SearchViewController: UITableViewController, UISearchBarDelegate {
                 }
             }
             
-        // これ呼ばなきゃリストが更新されません
+        // リスト更新
         task?.resume()
         }
     }
     
+    // Segue 準備
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
         if segue.identifier == "Detail"{
@@ -90,7 +92,7 @@ class SearchViewController: UITableViewController, UISearchBarDelegate {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        // 画面遷移時に呼ばれる
+        // 画面遷移時に呼び出し
         idx = indexPath.row
         performSegue(withIdentifier: "Detail", sender: self)
     }
