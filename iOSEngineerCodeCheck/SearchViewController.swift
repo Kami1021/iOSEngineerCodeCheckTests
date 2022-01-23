@@ -15,8 +15,8 @@ class SearchViewController: UITableViewController, UISearchBarDelegate {
     var repositories: [[String: Any]]=[]
     
     var task: URLSessionTask?
-    var word: String!
-    var url: String!
+    var word: String! = ""
+    var url: String! = ""
     var index: Int!
     
     override func viewDidLoad() {
@@ -40,13 +40,13 @@ class SearchViewController: UITableViewController, UISearchBarDelegate {
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        
-        word = searchBar.text!
-        
-        //サーチバーに文字が入力されていたら実行
-        if word.count != 0 {
+        if let word = searchBar.text{
             
-            url = "https://api.github.com/search/repositories?q=\(word!)"
+        //サーチバーに文字が入力されていたら実行
+        if word != "" {
+            
+            url = "https://api.github.com/search/repositories?q=\(word)"
+
             task = URLSession.shared.dataTask(with: URL(string: url)!) { (data, res, err) in
                 if let obj = try! JSONSerialization.jsonObject(with: data!) as? [String: Any] {
                     
@@ -56,6 +56,7 @@ class SearchViewController: UITableViewController, UISearchBarDelegate {
                         DispatchQueue.main.async {
                             
                             self.tableView.reloadData()
+                        }
                         }
                     }
                 }
@@ -71,8 +72,9 @@ class SearchViewController: UITableViewController, UISearchBarDelegate {
         
         if segue.identifier == "Detail"{
             
-            let detail = segue.destination as! ResultViewController
+            if let detail = segue.destination as? ResultViewController{
             detail.vc1 = self
+            }
         }
     }
     
