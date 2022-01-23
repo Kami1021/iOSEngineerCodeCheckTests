@@ -40,7 +40,6 @@ class ViewController2: UIViewController {
     func getImage(){
         
         let repo = vc1.repo[vc1.idx]
-        
         TtlLbl.text = repo["full_name"] as? String
         
         if let owner = repo["owner"] as? [String: Any] {
