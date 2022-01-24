@@ -26,7 +26,6 @@ class ResultViewController: UIViewController {
     override func viewDidLoad() {
         
         super.viewDidLoad()
-        
         let repo = vc1.repositories[vc1.index]
         
         //該当リポジトリの詳細テキスト
@@ -36,7 +35,7 @@ class ResultViewController: UIViewController {
         ForksLabel.text = "\(repo["forks_count"] as? Int ?? 0) forks"
         IssuesLabel.text = "\(repo["open_issues_count"] as? Int ?? 0) open issues"
         getImage()
-    }
+            }
     
     func getImage(){
         
