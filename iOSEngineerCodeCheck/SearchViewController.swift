@@ -8,7 +8,7 @@
 import UIKit
 
 class SearchViewController: UITableViewController, UISearchBarDelegate {
-
+    
     @IBOutlet weak var SearchBar: UISearchBar!
     
     var repositories: [[String: Any]]=[]
@@ -39,30 +39,29 @@ class SearchViewController: UITableViewController, UISearchBarDelegate {
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        
+        
         if let word = searchBar.text{
             
-        //サーチバーに文字が入力されていたら実行
-        if word != "" {
-            
-            url = "https://api.github.com/search/repositories?q=\(word)"
-
-            task = URLSession.shared.dataTask(with: URL(string: url)!) { (data, res, err) in
-                if let obj = try! JSONSerialization.jsonObject(with: data!) as? [String: Any] {
-                    
-                    if let items = obj["items"] as? [[String: Any]] {
+            if word.count != 0 {
+                
+                url = "https://api.github.com/search/repositories?q=\(word)"
+                task = URLSession.shared.dataTask(with: URL(string: url)!) {[weak self] (data, res, err) in
+                    if let obj = try! JSONSerialization.jsonObject(with: data!) as? [String: Any] {
                         
-                    self.repositories = items
-                        DispatchQueue.main.async {
+                        if let items = obj["items"] as? [[String: Any]] {
                             
-                            self.tableView.reloadData()
-                        }
+                            self?.repositories = items
+                            DispatchQueue.main.async {
+                                
+                                self?.tableView.reloadData()
+                            }
                         }
                     }
                 }
             }
-            
-        // リスト更新
-        task?.resume()
+            // リスト更新
+            task?.resume()
         }
     }
     
@@ -72,7 +71,7 @@ class SearchViewController: UITableViewController, UISearchBarDelegate {
         if segue.identifier == "Detail"{
             
             if let detail = segue.destination as? ResultViewController{
-            detail.vc1 = self
+                detail.vc1 = self
             }
         }
     }
