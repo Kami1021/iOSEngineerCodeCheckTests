@@ -3,47 +3,97 @@
 
 ## 概要
 
-本プロジェクトは株式会社ゆめみ（以下弊社）が、弊社に iOS エンジニアを希望する方に出す課題のベースプロジェクトです。本課題が与えられた方は、下記の概要を詳しく読んだ上で課題を取り組んでください。
+株式会社ゆめみさんのIOSコードチェック課題の概要をまとめる。
+主にIssuesの初級にチャレンジしてリファクタリングしたいった。
 
-## アプリ仕様
-
-本アプリは GitHub のリポジトリーを検索するアプリです。
-
-![動作イメージ](README_Images/app.gif)
 
 ### 環境
 
-- IDE：基本最新の安定版（本概要更新時点では Xcode 13.0）
-- Swift：基本最新の安定版（本概要更新時点では Swift 5.5）
-- 開発ターゲット：基本最新の安定版（本概要更新時点では iOS 15.0）
-- サードパーティーライブラリーの利用：オープンソースのものに限り制限しない
+- IDE：Xcode 13.21
+- Swift：Swift 5.52
+- 開発ターゲット：iOS 15.0
 
-### 動作
+### 課題
 
-1. 何かしらのキーワードを入力
-2. GitHub API（`search/repositories`）でリポジトリーを検索し、結果一覧を概要（リポジトリ名）で表示
-3. 特定の結果を選択したら、該当リポジトリの詳細（リポジトリ名、オーナーアイコン、プロジェクト言語、Star 数、Watcher 数、Fork 数、Issue 数）を表示
+以下の４つについてソースコードを修正した。
+1.可読性の向上
+2.安全性の向上
+3.バグを修正
+4.FatVCの回避
 
-## 課題取り組み方法
-
-Issues を確認した上、本プロジェクトを [**Duplicate** してください](https://help.github.com/en/github/creating-cloning-and-archiving-repositories/duplicating-a-repository)（Fork しないようにしてください。必要ならプライベートリポジトリーにしても大丈夫です）。今後のコミットは全てご自身のリポジトリーで行ってください。
-
-コードチェックの課題 Issue は全て [`課題`](https://github.com/yumemi/ios-engineer-codecheck/milestone/1) Milestone がついており、難易度に応じて Label が [`初級`](https://github.com/yumemi/ios-engineer-codecheck/issues?q=is%3Aopen+is%3Aissue+label%3A初級+milestone%3A課題)、[`中級`](https://github.com/yumemi/ios-engineer-codecheck/issues?q=is%3Aopen+is%3Aissue+label%3A中級+milestone%3A課題+) と [`ボーナス`](https://github.com/yumemi/ios-engineer-codecheck/issues?q=is%3Aopen+is%3Aissue+label%3Aボーナス+milestone%3A課題+) に分けられています。課題の必須／選択は下記の表とします：
-
-|   | 初級 | 中級 | ボーナス
-|--:|:--:|:--:|:--:|
-| 新卒／未経験者 | 必須 | 選択 | 選択 |
-| 中途／経験者 | 必須 | 必須 | 選択 |
+ただし、今回自分の実力が及んでいなかったため
+うまく実装しきれていないところもある。
+その部分は苦労した部分、つまづいた部分などを記載しておくこととする。
 
 
-課題 Issueをご自身のリポジトリーにコピーするGitHub Actionsをご用意しております。  
-[こちらのWorkflow](./.github/workflows/copy-issues.yml)を[手動でトリガーする](https://docs.github.com/ja/actions/managing-workflow-runs/manually-running-a-workflow)ことでコピーできますのでご活用下さい。
+・今回は一人での作業だが、実務では共同開発が予想される
+・他人から見て何の作業をしていて何を変更したのかわかりやすい
+という観点から今回はブランチをIssuesごとに分けて作業した。
 
-課題が完成したら、リポジトリーのアドレスを教えてください。
+1:Main
+1-1:develop
+1-1-1:feature/bug(バグを修正)
+1-1-2:feature/safety(安全性の向上)
+1-1-3:feature/readability(可読性の向上)
+1-1-4:feature/FatVC(Fat VCの回避)
+1-1-5:README.md(README.mdの作成)
+
+このようなブランチの分け方をした。
+（1-1は1のMainブランチの派生を表し、1-1-1は1-1のdevelopブランチの派生を表す。）
+
+ 
+
+###バグを修正
+1.レイアウト修正に関しては、検索結果画面の詳細が画面上部にずれているという点を直した。
+オートレイアウトの”Add Missing Constraints”を使用して調整を行なった。
+
+2.メモリリークに関しては循環参照をしている箇所を２箇所ほど"weak self"を加えて循環参照を防ぐことでメモリリークを防いだ。
+
+3.パースエラーの箇所に関しては、特に自分は見つからなかったため特に何もしていない。
+
+###安全性の向上
+1.こちらについては、if letを用いることで安全にアンラップできるようにした。
+2.さらに不要なIUOを排除した。
+
+###可読性の向上
+1.命名規則の変更
+1.1:クラス名をその画面の役割の名前に変更した。
+ViewController　→ SearchViewContlroller
+ViewController2　→ ResultViewContlroller
+
+2.2:省略されている変数を省略無しにした。
+例）idx　→ index
+
+3.3:改行、インデント
+{　の後は１行あける
+}　の前の行は開けない
+このように修正した。
+
+###Fat VCの回避
+こちらに関して今回一番苦労した。
+＜やったこと＞
+MVCモデルの適用をして、Modelに変数を保持した。
+
+＜やりたかったこと＞
+MVVMモデルの採用
+Model：データ保持
+ViewModel：プロトコルを用いて、基本的な処理はここで
+View：ViewModelのプロトコルに準拠させて、基本的にはViewのみを行う。
+
+採用理由：SwiftUIでの共同開発をしていて、
+そこで使っているモデルがMVVCモデルだったので自分が一番理解していた。
+（過去にJavaでMVCモデルをやってみたが、扱いづらかった。）
+
+＜苦労した点＞
+SearchBarの処理やTableViewの処理を全てViewControllerでやっているため
+FatVCが起きていると考えたためそこを分離させたかった。
+SearchBarがSearchViewControllerに紐づいていたのを
+うまくView Modelに紐付けを変更できなかった。
+
 
 ## 参考記事
 
-提出された課題の評価ポイントに関しては、[こちらの記事](https://qiita.com/lovee/items/d76c68341ec3e7beb611)に詳しく書かれてありますので、ぜひご覧ください。
-=======
-# iOSEngineerCodeCheckTests
->>>>>>> origin/main
+[良いコードの書き方](https://qiita.com/alt_yamamoto/items/25eda376e6b947208996)
+[Swiftのメモリリークについてまとめてみた - Qiita](https://qiita.com/ryu1sazae/items/201275f9ac3af1ec9e64)
+[【Optional型】アンラップの仕方や非Optional型との違い](https://tech-maga.com/swift-optional)
+
