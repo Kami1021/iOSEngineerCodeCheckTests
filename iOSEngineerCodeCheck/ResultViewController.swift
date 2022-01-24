@@ -9,7 +9,7 @@
 import UIKit
 
 class ResultViewController: UIViewController {
-    
+        
     @IBOutlet weak var ImageView: UIImageView!
     
     @IBOutlet weak var TitleLabel: UILabel!
@@ -26,7 +26,7 @@ class ResultViewController: UIViewController {
     override func viewDidLoad() {
         
         super.viewDidLoad()
-        let repo = vc1.repositories[vc1.index]
+        let repo = vc1.model.repositories[vc1.model.index]
         
         //該当リポジトリの詳細テキスト
         LanguageLabel.text = "Written in \(repo["language"] as? String ?? "")"
@@ -39,7 +39,7 @@ class ResultViewController: UIViewController {
     
     func getImage(){
         
-        let repo = vc1.repositories[vc1.index]
+        let repo = vc1.model.repositories[vc1.model.index]
         // repo["owner"]でString型でダウンキャスト
         TitleLabel.text = repo["full_name"] as? String
         
