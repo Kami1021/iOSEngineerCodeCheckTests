@@ -31,7 +31,7 @@
 
 という観点から今回はブランチをIssuesごとに分けて作業した。  
 
-1:Main
+1:Main  
 1-1:develop  
 1-1-1:feature/bug(バグを修正)  
 1-1-2:feature/safety(安全性の向上)  
